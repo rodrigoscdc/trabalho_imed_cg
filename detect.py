@@ -2,18 +2,8 @@ import cv2
 from imutils.object_detection import non_max_suppression
 import imutils
 import numpy as np
-
-import socket 
-
-# host = '' 
-# port = 7000 
-# addr = (host, port) 
-# serv_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-# serv_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1) 
-# serv_socket.bind(addr) 
-# serv_socket.listen(10) 
-# client_socket.send("Trabalhador encontrado") 
-# serv_socket.close()
+from requests import Session
+# from signalr import Connection
 
 def GetContorno(color):
     mascara = cv2.inRange(hsv, color, upper)
@@ -23,11 +13,25 @@ def GetContorno(color):
     contornos, _ = cv2.findContours(bordas, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
     return contornos
 
+# with Session() as session:
+#     connection = Connection("http://localhost:5000/signalr", session)
+
+#     conn = connection.register_hub('step5')
+
+#     connection.start()
+
+#     #create error handler
+#     def print_error(error):
+#         print('error: ', error)
+
+#     #process errors
+#     connection.error += print_error
+
 laranja = np.array([0, 98,120]) # laranja
 upper = np.array([15, 255, 255])
 
-hog = cv2.HOGDeor()
-hog.setSVMDetector(cv2.HOGDeor_getDefaultPeopleDetector())
+hog = cv2.HOGDescriptor()
+hog.setSVMDetector(cv2.HOGDescriptor_getDefaultPeopleDetector())
 
 camera = cv2.VideoCapture(0)
 while True:
@@ -49,6 +53,13 @@ while True:
             if area > 1500:
                 cv2.rectangle(frame, (xA, yA), (xB, yB), (0, 255, 0), 2)
                 print("[INFO] {} pessoas detectadas".format(len(pick)))
+                # with connection:
+                #     while True:
+                #         #post new message
+                #         conn.server.invoke('alert', 'Trabalhador na pista.')    
+                #         #wait a second before exit
+                #         connection.wait(1)
+                        
     cv2.imshow("Camera", frame)
 
     key = cv2.waitKey(10)
