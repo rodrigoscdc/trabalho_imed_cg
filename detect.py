@@ -3,6 +3,18 @@ from imutils.object_detection import non_max_suppression
 import imutils
 import numpy as np
 
+import socket 
+
+# host = '' 
+# port = 7000 
+# addr = (host, port) 
+# serv_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+# serv_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1) 
+# serv_socket.bind(addr) 
+# serv_socket.listen(10) 
+# client_socket.send("Trabalhador encontrado") 
+# serv_socket.close()
+
 def GetContorno(color):
     mascara = cv2.inRange(hsv, color, upper)
     resultado = cv2.bitwise_and(frame, frame, mask=mascara)
